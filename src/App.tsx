@@ -1,36 +1,37 @@
-// import "./App.css";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { BrowserRouter, Route, Routes } from "react-router";
-import Layout from "./components/layout";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "./components/ui/sonner";
 import { ThemeProvider } from "./context/theme-provider";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { CityPage } from "./pages/city-page";
+import Layout from "./components/layout";
 import WeatherDashboard from "./pages/weather-dashboard";
-import CityPage from "./pages/city-page";
 
-// Create a client
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   return (
-    // Provide the client to your App
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <ThemeProvider defaultTheme="dark">
           <Layout>
             <Routes>
               <Route path="/" element={<WeatherDashboard />} />
               <Route path="/city/:cityName" element={<CityPage />} />
             </Routes>
           </Layout>
+          <Toaster richColors />
         </ThemeProvider>
       </BrowserRouter>
-      {/* The rest of your application */}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
