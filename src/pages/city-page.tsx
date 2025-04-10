@@ -15,6 +15,7 @@ export function CityPage() {
   const lat = parseFloat(searchParams.get("lat") || "0");
   const lon = parseFloat(searchParams.get("lon") || "0");
 
+
   const coordinates = { lat, lon };
 
   const weatherQuery = useWeatherQuery(coordinates);
